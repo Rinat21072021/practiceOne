@@ -1,26 +1,46 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './App.css';
+import {tasksType, TodoList} from "./Components/TodoList";
+
+export type filterCheckedType = 'All' | 'Active' | 'Completed'
 
 function App() {
+
+    let [NewTask, setNewTask] = useState<Array<tasksType>>([
+        {id: 1, title: 'JS', isDone: true},
+        {id: 2, title: 'HTML & CSS', isDone: true},
+        {id: 3, title: 'React', isDone: false},
+        {id: 4, title: 'React', isDone: false},
+    ])
+    let filterTask = NewTask
+    let removeTask = (id: number) => {
+        filterTask = NewTask.filter(t => t.id !== id)
+        setNewTask(filterTask)
+    }
+
+    let [filterChecked, setFilterChecked] = useState<filterCheckedType>('All')
+    if (filterChecked === 'Active') {
+        filterTask = filterTask.filter(m => m.isDone)
+    }
+    if (filterChecked === 'Completed') {
+        filterTask = filterTask.filter(m => !m.isDone)
+    }
+    let filterCheck = (value: filterCheckedType) => {
+        setFilterChecked(value)
+    }
+
+    let addTask=()=>{
+        console.log('qw')
+    }
     return (
         <div className="App">
-            <div>
-                <h3>What to learn</h3>
-                <div>
-                    <input/>
-                    <button>+</button>
-                </div>
-                <ul>
-                    <li><input type="checkbox" checked={true}/> <span>HTML&CSS</span></li>
-                    <li><input type="checkbox" checked={true}/> <span>JS</span></li>
-                    <li><input type="checkbox" checked={false}/> <span>React</span></li>
-                </ul>
-                <div>
-                    <button>All</button>
-                    <button>Active</button>
-                    <button>Completed</button>
-                </div>
-            </div>
+            <TodoList
+                title={'What to learn?'}
+                tasks={filterTask}
+                removeTask={removeTask}
+                filterCheck={filterCheck}
+                addTask={addTask}
+            />
         </div>
     );
 }
