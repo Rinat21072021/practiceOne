@@ -1,20 +1,21 @@
 import React, {useState} from 'react';
 import './App.css';
 import {tasksType, TodoList} from "./Components/TodoList";
+import {v1} from "uuid";
 
 export type filterCheckedType = 'All' | 'Active' | 'Completed'
 
 function App() {
 
-    let [NewTask, setNewTask] = useState<Array<tasksType>>([
-        {id: 1, title: 'JS', isDone: true},
-        {id: 2, title: 'HTML & CSS', isDone: true},
-        {id: 3, title: 'React', isDone: false},
-        {id: 4, title: 'React', isDone: false},
+    let [NewTasks, setNewTask] = useState<Array<tasksType>>([
+        {id: v1(), title: 'JS', isDone: true},
+        {id: v1(), title: 'HTML & CSS', isDone: true},
+        {id: v1(), title: 'React', isDone: false},
+        {id: v1(), title: 'React', isDone: false},
     ])
-    let filterTask = NewTask
-    let removeTask = (id: number) => {
-        filterTask = NewTask.filter(t => t.id !== id)
+    let filterTask = NewTasks
+    let removeTask = (id: string) => {
+        filterTask = NewTasks.filter(t => t.id !== id)
         setNewTask(filterTask)
     }
 
@@ -29,9 +30,11 @@ function App() {
         setFilterChecked(value)
     }
 
-    let addTask=()=>{
-        console.log('qw')
-    }
+    let addTask=(title:string)=>{
+        let task = {id: v1(), title: title, isDone: false}
+        let newTask=[task, ...NewTasks]
+        setNewTask(newTask)
+       }
     return (
         <div className="App">
             <TodoList
