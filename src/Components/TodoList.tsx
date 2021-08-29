@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {ChangeEvent,KeyboardEvent, useState} from 'react';
 import {filterCheckedType} from "../App";
 
 export type tasksType = {
@@ -22,28 +22,48 @@ export function TodoList(props: TodoListType) {
     </li>)
 
     let [valueInput, setValueInput] = useState('')
-
+    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        {
+            setValueInput(e.currentTarget.value)
+        }
+    }
+    const ButtonClickHandler = () => {
+        {
+            props.addTask(valueInput);
+            setValueInput('')
+        }
+    }
+    const clickAllHandler = () => {
+        props.filterCheck('All')
+    }
+    const clickActiveHandler = () => {
+        props.filterCheck('Active')
+    }
+    const clickCompletedHandler = () => {
+        props.filterCheck('Completed')
+    }
+    const onKeyPressHandler=(e:KeyboardEvent<HTMLInputElement>)=>{
+        if (e.key==="Enter"){
+            props.addTask(valueInput);
+            setValueInput('')
+        }
+    }
 
 
     return (
         <div>
             <h3>{props.title}</h3>
             <div>
-                <input value={valueInput} onChange={e => {
-                    setValueInput(e.currentTarget.value)
-
-                }}/>
-                <button
-                    onClick={() => {props.addTask(valueInput);setValueInput('')}}
-                >+</button>
+                <input value={valueInput} onChange={onChangeHandler} onKeyPress={onKeyPressHandler}/>
+                <button onClick={ButtonClickHandler}>+</button>
             </div>
             <ul>
                 {mapTask}
             </ul>
             <div>
-                <button onClick={() => props.filterCheck('All')}>All</button>
-                <button onClick={() => props.filterCheck('Active')}>Active</button>
-                <button onClick={() => props.filterCheck('Completed')}>Completed</button>
+                <button onClick={clickAllHandler}>All</button>
+                <button onClick={clickActiveHandler}>Active</button>
+                <button onClick={clickCompletedHandler}>Completed</button>
             </div>
         </div>
 
